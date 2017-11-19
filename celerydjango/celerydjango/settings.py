@@ -136,4 +136,4 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
 
-BROKER_URL = "amqp://myuser:mypassword@127.0.0.1:5672//"
+BROKER_URL = "amqp://myuser:mypassword@127.0.0.1:5672/myvhost/"
