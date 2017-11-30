@@ -15,7 +15,7 @@ app.conf.beat_schedule = {
     'send-report-every-night': {
         'task': 'blog.tasks.send_view_count_report',
         # 'schedule': crontab(minute=0, hour=0), #if you want it to run daily at midnight
-        'schedule': crontab(minute='*/5'), #if you want it to run daily at midnight
+        'schedule': crontab(minute='*/5'), #if you want it to run at 5 min interval
     }
 }
 
