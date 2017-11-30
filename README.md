@@ -8,6 +8,7 @@ sudo apt-get install rabbitmq-server
 
 Once the installation is complete, create user, add a virtual host and set desired permissions.
 ```
+sudo rabbitmq-server
 sudo rabbitmqctl add_user myuser mypassword
 sudo rabbitmqctl add_vhost myvhost
 sudo rabbitmqctl set_permissions -p myvhost myuser ".*" ".*" ".*"
@@ -25,6 +26,6 @@ Now run this in your manage.py directry using virtualenvinonment
 ```
 celery -A celerydjango worker -l info
 
-celery -A mysite beat -l info
+celery -A celerydjango beat -l info
 
 ```
