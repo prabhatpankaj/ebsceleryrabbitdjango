@@ -30,7 +30,7 @@ celery -A celerydjango beat -l info
 
 ```
 # for setting up django project on ubuntu replace os.environ[] value to actual value . 
-# for setting up djano project in elasticbeanstalk update these values to Software Configuration. 
+# for setting up django project in elasticbeanstalk update these values to Software Configuration. 
 
 ```
 'NAME': os.environ['RDS_DB_NAME'],
