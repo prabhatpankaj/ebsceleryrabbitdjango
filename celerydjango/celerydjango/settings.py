@@ -4,7 +4,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '(fcu4+@jgr4fvmb+yqk)e+m9x6ux*)kfu^jjf&=($7090o=grk'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -100,6 +100,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 INSTALLED_APPS = INSTALLED_APPS + [
     'django.contrib.sites',
+    'storages',
     'coreapp',
     'usermodel',
     'blog',
@@ -119,21 +120,47 @@ USE_TZ = True
 
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_HOST = 's3-ap-southeast-1.amazonaws.com'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
+    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
+    MEDIA_URL = '/media/'
+
+else:
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'celerydjango.storage.StaticStorage'
+    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+    MEDIAFILES_LOCATION = 'media'
+    MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+    DEFAULT_FILE_STORAGE = 'celerydjango.storage.MediaStorage'
+
+
+SERVER_EMAIL = 'hello@learnix.in'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_EMAIL_USER = 'prabhatiitbhu@gmail.com'
-DOMAIN_NAME = 'localhost:8000'
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+DEFAULT_FROM_EMAIL = 'prabhatiitbhu@gmail.com'
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static_cdn')
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media_cdn')
+
+DOMAIN_NAME = 'http://celeryproject-dev.ap-southeast-1.elasticbeanstalk.com'
+
+SITE_ID = 1
 
 BROKER_URL = "amqp://myuser:mypassword@127.0.0.1:5672/myvhost/"
